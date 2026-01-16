@@ -4,6 +4,17 @@ import { cookies } from 'next/headers'
 import { Database, QRRedirect, ScanAnalyticsInsert } from '@/types/database'
 import crypto from 'crypto'
 
+export async function OPTIONS(request: Request) {
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    })
+}
+
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -76,7 +87,12 @@ export async function GET(
             })
 
         // Redirect to the target UPI URL
-        return NextResponse.redirect(qrRedirect.target_url)
+        return NextResponse.redirect(qrRedirect.target_url, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            },
+        })
 
     } catch (err) {
         console.error('Redirect error:', err)
