@@ -12,7 +12,7 @@ export default function CreateQRPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [success, setSuccess] = useState<{ qrCodeId: string; name: string } | null>(null)
+    const [success, setSuccess] = useState<{ qrCodeId: string; name: string; targetUrl: string } | null>(null)
 
     // Form state
     const [name, setName] = useState('')
@@ -56,7 +56,7 @@ export default function CreateQRPage() {
                 throw new Error(data.error || 'Failed to create QR code')
             }
 
-            setSuccess({ qrCodeId: data.qr_code_id, name: data.name })
+            setSuccess({ qrCodeId: data.qr_code_id, name: data.name, targetUrl: data.target_url })
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred')
         } finally {
@@ -81,7 +81,7 @@ export default function CreateQRPage() {
 
                     <div className="bg-white rounded-2xl p-6 mb-8 shadow-inner inline-block">
                         <QRCodeDisplay
-                            value={getRedirectUrl(success.qrCodeId)}
+                            value={success.targetUrl}
                             size={200}
                             name={success.name}
                         />
